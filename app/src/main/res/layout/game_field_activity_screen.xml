@@ -25,12 +25,21 @@
         android:layout_marginTop="80dp"
         android:textSize="14pt" />
 
+    <TextView
+        android:id="@+id/game_field_activity_textview_hp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="80dp"
+        android:textSize="14pt" />
+
     <Button
         android:id="@+id/game_field_activity_button_game_field"
         android:layout_width="match_parent"
         android:layout_height="300dp"
         android:layout_alignParentBottom="true"
-        android:layout_marginBottom="20dp"/>
+        android:layout_marginBottom="20dp"
+        android:background="@color/button_color"/>
 
 
 </RelativeLayout>
