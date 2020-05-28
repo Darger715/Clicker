@@ -41,5 +41,13 @@
         android:layout_marginBottom="20dp"
         android:background="@color/button_color"/>
 
+    <Button
+        android:id="@+id/game_field_activity_button_save_and_exit"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="250dp"
+        android:text="Save and Exit" />
+
 
 </RelativeLayout>

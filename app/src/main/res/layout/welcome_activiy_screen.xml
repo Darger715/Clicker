@@ -33,12 +33,15 @@
         android:textSize="10pt"/>
 
     <Button
-        android:id="@+id/welcomeActivity_button_start"
+        android:id="@+id/welcomeActivity_button_update_results"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="500dp"
         android:text="start"
         android:textSize="12pt" />
+
+
+
 
 </RelativeLayout>
