@@ -4,18 +4,11 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.annotation.SuppressLint;
-import android.content.Context;
 import android.content.Intent;
-import android.graphics.BitmapFactory;
-import android.graphics.Color;
-import android.graphics.Path;
-import android.media.AudioManager;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.util.Log;
-import android.view.SurfaceHolder;
-import android.view.SurfaceView;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
@@ -46,8 +39,8 @@ public class GameFieldActivity extends AppCompatActivity {
         button_click = findViewById(R.id.game_field_activity_button_game_field);
         button_save_exit = findViewById(R.id.game_field_activity_button_save_and_exit);
 
-        level = getIntent().getIntExtra("levelInfo_intent", 1);
-        score = getIntent().getIntExtra("scoreInfo_intent", 0);
+        level = getIntent().getIntExtra("new_level_intent", 1);
+        score = getIntent().getIntExtra("new_score_intent", 0);
 
 
         textView_level.setText("Level: " + level);
@@ -106,65 +99,29 @@ public class GameFieldActivity extends AppCompatActivity {
         });
         t_score.start();
 
-        /*
-        final Handler handler_level = new Handler() {
-
-            @SuppressLint("HandlerLeak")
-            @Override
-            public void handleMessage(@NonNull Message msg) {
-
-                if (msg.what == 1) {
-                    Toast.makeText(GameFieldActivity.this, "LEVEL UP", Toast.LENGTH_SHORT).show();
-                    textView_level.setText("Level: " + level);
-                }
-            }
-        };
-
-        Thread t_level = new Thread(new Runnable() {
-            @Override
-            public void run() {
-                while (level > 0) {
-                    if (amount_clicks % 100 == 0) {
-                        level++;
-                        handler_score.sendEmptyMessageDelayed(1, 500);
-                    }
-
-
-                }
-            }
-        });
-        t_level.start();
-        */
-
 
         //передача данных при закрытии активности
-        button_save_exit.setOnClickListener(new OnClickListener()
-        {
+        button_save_exit.setOnClickListener(new OnClickListener() {
             @Override
-            public void onClick(View v)
-            {
+            public void onClick(View v) {
 
 
+                Intent new_level_score_intent = new Intent(GameFieldActivity.this, WelcomeActivity.class);
 
-                Intent new_level_intent = new Intent(GameFieldActivity.this, WelcomeActivity.class);
+                if (level > (getIntent().getIntExtra("new_level_intent", 0))) {
 
-                    if (level > (getIntent().getIntExtra("levelInfo_intent", 0)))
-                    {
-
-                        new_level_intent.putExtra("new_level", level);
-
-                    }
-
-                if (amount_clicks > (getIntent().getIntExtra("scoreInfo_intent", 0)))
-                {
-
-                    new_level_intent.putExtra("new_score", score);
-
+                    new_level_score_intent.putExtra("new_level", level);
 
                 }
 
-                setResult(RESULT_OK, new_level_intent);
-            finish();}
+                if (amount_clicks > (getIntent().getIntExtra("new_score_intent", 0)))
+                {
+                    new_level_score_intent.putExtra("new_score", score);
+                }
+
+                setResult(RESULT_OK, new_level_score_intent);
+                finish();
+            }
         });
 
 
