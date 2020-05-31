@@ -61,19 +61,22 @@ public class WelcomeActivity extends AppCompatActivity {
 
 
     }
-    protected void OnActivityResult(int requestCode, int resultCode, Intent data) {
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (resultCode == RESULT_OK) {
-            switch (requestCode) {
-                case REQUEST_CODE_LEVEL:
-                    level = data.getIntExtra("new_level", score);
-                    textView_levelInfo.setText("Level:" + level);
-                    Log.e("SCORE","NEW SCORE");
-                    break;
-                case REQUEST_CODE_SCORE:
-                    level = data.getIntExtra("new_level", 1);
+            Intent intent_score_level = new Intent(WelcomeActivity.this,GameFieldActivity.class);
+
+
+                    level = data.getIntExtra("new_level", level);
+                    textView_levelInfo.setText("Level: " + level);
+                    Log.e("LEVEL","NEW LEVEL");
+            intent_score_level.putExtra("levelInfo_intent", level);
+
+
+                    score = data.getIntExtra("new_score", 1);
                     textView_scoreInfo.setText("Score: " + score);
-                    break;
-            }
+                    Log.e("SCORE","NEW SCORE");
+            intent_score_level.putExtra("scoreInfo_intent", score);
+
         } else {
             Toast.makeText(WelcomeActivity.this, "WRONG", Toast.LENGTH_SHORT).show();
         }

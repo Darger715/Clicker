@@ -61,7 +61,7 @@ public class GameFieldActivity extends AppCompatActivity {
 
 
                 //level
-                if (amount_clicks % 100 == 0) {
+                if (amount_clicks % 10 == 0) {
                     level++;
                     Toast.makeText(GameFieldActivity.this, "LEVEL UP", Toast.LENGTH_SHORT).show();
                     textView_level.setText("Level: " + level);
@@ -144,22 +144,26 @@ public class GameFieldActivity extends AppCompatActivity {
             public void onClick(View v)
             {
 
-                    if (amount_clicks > (getIntent().getIntExtra("scoreInfo_intent", 0)))
-                    {
-                        Intent new_score_intent = new Intent(GameFieldActivity.this, WelcomeActivity.class);
-                        new_score_intent.putExtra("new_score", score);
-                        Log.e("RESULT","SCORE_RESULT_OK");
-                        setResult(RESULT_OK, new_score_intent);
-                    }
 
+
+                Intent new_level_intent = new Intent(GameFieldActivity.this, WelcomeActivity.class);
 
                     if (level > (getIntent().getIntExtra("levelInfo_intent", 0)))
                     {
-                        Intent new_level_intent = new Intent(GameFieldActivity.this, WelcomeActivity.class);
+
                         new_level_intent.putExtra("new_level", level);
-                        setResult(RESULT_OK, new_level_intent);
+
                     }
 
+                if (amount_clicks > (getIntent().getIntExtra("scoreInfo_intent", 0)))
+                {
+
+                    new_level_intent.putExtra("new_score", score);
+
+
+                }
+
+                setResult(RESULT_OK, new_level_intent);
             finish();}
         });
 
