@@ -7,9 +7,12 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.media.AudioManager;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.os.VibrationEffect;
+import android.os.Vibrator;
 import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -30,6 +33,9 @@ public class GameFieldActivity extends AppCompatActivity {
     long score;
     boolean check_new_score = true;
 
+    private AudioManager audioManager;
+    private Vibrator vibrator;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,7 +50,6 @@ public class GameFieldActivity extends AppCompatActivity {
 
         level = getIntent().getIntExtra("new_level_intent", 1);
         score = getIntent().getLongExtra("new_score_intent", 0);
-        Log.e("SCORE","score___ "+score);
 
 
         textView_amountClicks.setText("Score:\n0");
@@ -55,11 +60,42 @@ public class GameFieldActivity extends AppCompatActivity {
             textView_level.setText("Level: 1");
         }
 
+        // Получаем доступ к менеджеру звуков
+        audioManager = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
+
+
         button_click.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
                 amount_clicks++;
                 textView_amountClicks.setText("Score:\n" + (long) amount_clicks);
+                //audioManager.loadSoundEffects();
+
+
+                final Handler handler_vibration = new Handler() {
+                    @SuppressLint("HandlerLeak")
+                    @Override
+                    public void handleMessage(@NonNull Message msg) {
+
+                        if (msg.what == 1) {
+                            vibrator = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
+                            vibrator.vibrate(50);
+                        }
+                    }
+                };
+
+                Thread t_vibration = new Thread(new Runnable() {
+                    @Override
+                    public void run() {
+                        if (button_click.isClickable()) {
+                            if (audioManager.getRingerMode() != AudioManager.RINGER_MODE_SILENT) {
+                                handler_vibration.sendEmptyMessage(1);
+                            }
+                        }
+                    }
+
+                });
+                t_vibration.start();
 
 
                 //level
@@ -86,7 +122,6 @@ public class GameFieldActivity extends AppCompatActivity {
                 if (msg.what == 1) {
                     if (check_new_score) {
                         Toast.makeText(GameFieldActivity.this, "NEW SCORE", Toast.LENGTH_SHORT).show();
-                        Log.e("SCORE","score: "+score);
                         check_new_score = false;
                     }
                 }
@@ -114,6 +149,8 @@ public class GameFieldActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
 
+                vibrator.cancel();
+
 
                 Intent new_level_score_intent = new Intent(GameFieldActivity.this, WelcomeActivity.class);
 
@@ -129,7 +166,6 @@ public class GameFieldActivity extends AppCompatActivity {
                 if (amount_clicks <= score) {
                     new_level_score_intent.putExtra("new_score", score);
                 }
-
 
                 setResult(RESULT_OK, new_level_score_intent);
                 finish();
