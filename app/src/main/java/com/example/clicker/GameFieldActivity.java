@@ -32,6 +32,8 @@ public class GameFieldActivity extends AppCompatActivity {
     int level;
     long score;
     boolean check_new_score = true;
+    boolean check_vibration;
+    boolean check_sound;
 
     private AudioManager audioManager;
     private Vibrator vibrator;
@@ -48,8 +50,11 @@ public class GameFieldActivity extends AppCompatActivity {
         button_click = findViewById(R.id.game_field_activity_button_game_field);
         button_save_exit = findViewById(R.id.game_field_activity_button_save_and_exit);
 
+        //Данные с первой Activity
         level = getIntent().getIntExtra("new_level_intent", 1);
         score = getIntent().getLongExtra("new_score_intent", 0);
+        check_vibration = getIntent().getBooleanExtra("check_vibration", true);
+        check_sound = getIntent().getBooleanExtra("check_sound", true);
 
 
         textView_amountClicks.setText("Score:\n0");
@@ -58,11 +63,21 @@ public class GameFieldActivity extends AppCompatActivity {
             textView_level.setText("Level: " + level);
         } else {
             textView_level.setText("Level: 1");
+
         }
+
 
         // Получаем доступ к менеджеру звуков
         audioManager = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
 
+//sound
+        if (check_sound) {
+            button_click.setSoundEffectsEnabled(true);
+            button_save_exit.setSoundEffectsEnabled(true);
+        } else {
+            button_click.setSoundEffectsEnabled(false);
+            button_save_exit.setSoundEffectsEnabled(false);
+        }
 
         button_click.setOnClickListener(new OnClickListener() {
             @Override
@@ -71,7 +86,7 @@ public class GameFieldActivity extends AppCompatActivity {
                 textView_amountClicks.setText("Score:\n" + (long) amount_clicks);
                 //audioManager.loadSoundEffects();
 
-
+//vibration
                 final Handler handler_vibration = new Handler() {
                     @SuppressLint("HandlerLeak")
                     @Override
@@ -89,7 +104,9 @@ public class GameFieldActivity extends AppCompatActivity {
                     public void run() {
                         if (button_click.isClickable()) {
                             if (audioManager.getRingerMode() != AudioManager.RINGER_MODE_SILENT) {
-                                handler_vibration.sendEmptyMessage(1);
+                                if (check_vibration) {
+                                    handler_vibration.sendEmptyMessage(1);
+                                }
                             }
                         }
                     }
@@ -99,7 +116,7 @@ public class GameFieldActivity extends AppCompatActivity {
 
 
                 //level
-                if (amount_clicks % 10 == 0) {
+                if (amount_clicks % 50 == 0) {
                     level++;
                     Toast.makeText(GameFieldActivity.this, "LEVEL UP", Toast.LENGTH_SHORT).show();
                     textView_level.setText("Level: " + level);

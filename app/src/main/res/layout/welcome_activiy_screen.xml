@@ -30,7 +30,7 @@
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="280dp"
-        android:textSize="10pt"/>
+        android:textSize="10pt" />
 
     <Button
         android:id="@+id/welcomeActivity_button_update_results"
@@ -41,7 +41,21 @@
         android:text="start"
         android:textSize="12pt" />
 
+    <Button
+        android:id="@+id/welcomeActivity_button_sound_on_off"
+        android:layout_width="124px"
+        android:layout_height="124px"
+        android:background="@drawable/image_sound_on"
+        android:layout_marginLeft="10dp"
+        android:layout_marginTop="10dp"/>
 
+    <Button
+        android:id="@+id/welcomeActivity_button_vibration_on_off"
+        android:layout_width="124px"
+        android:layout_height="124px"
+        android:background="@drawable/image_vibration_on"
+        android:layout_marginLeft="80dp"
+        android:layout_marginTop="10dp"/>
 
 
 </RelativeLayout>
