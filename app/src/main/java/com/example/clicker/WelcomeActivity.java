@@ -17,10 +17,9 @@ public class WelcomeActivity extends AppCompatActivity {
     TextView textView_scoreInfo;
     Button update_results;
     int level = 1;
-    int score;
+    long score;
 
     final int REQUEST_CODE_SCORE = 1;
-    final int REQUEST_CODE_LEVEL = 2;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -63,7 +62,7 @@ public class WelcomeActivity extends AppCompatActivity {
             textView_levelInfo.setText("Level: " + level);
 
 
-            score = data.getIntExtra("new_score", 0);
+            score = data.getLongExtra("new_score", 0);
             textView_scoreInfo.setText("Score: " + score);
 
 

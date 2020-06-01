@@ -23,9 +23,9 @@ public class GameFieldActivity extends AppCompatActivity {
     TextView textView_hp;
     Button button_click;
     Button button_save_exit;
-    int amount_clicks = 0;
+    long amount_clicks = 0;
     int level;
-    int score;
+    long score;
     boolean check_new_score = true;
 
     @Override
@@ -40,7 +40,7 @@ public class GameFieldActivity extends AppCompatActivity {
         button_save_exit = findViewById(R.id.game_field_activity_button_save_and_exit);
 
         level = getIntent().getIntExtra("new_level_intent", 1);
-        score = getIntent().getIntExtra("new_score_intent", 0);
+        score = getIntent().getLongExtra("new_score_intent", 0);
 
 
         textView_level.setText("Level: " + level);
@@ -50,7 +50,7 @@ public class GameFieldActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 amount_clicks++;
-                textView_amountClicks.setText("Score:\n" + (int) amount_clicks);
+                textView_amountClicks.setText("Score:\n" + (long) amount_clicks);
 
 
                 //level
@@ -86,10 +86,9 @@ public class GameFieldActivity extends AppCompatActivity {
         Thread t_score = new Thread(new Runnable() {
             @Override
             public void run() {
-                while (1 == 1) {
+                while (check_new_score){
                     if (!(amount_clicks == 0 && score == 0)) {
                         if (amount_clicks > score) {
-                            score = amount_clicks;
                             handler_score.sendEmptyMessage(1);
                         }
                     }
@@ -114,10 +113,14 @@ public class GameFieldActivity extends AppCompatActivity {
 
                 }
 
-                if (amount_clicks > (getIntent().getIntExtra("new_score_intent", 0)))
+                if (amount_clicks > score)
+                {
+                    new_level_score_intent.putExtra("new_score", amount_clicks);
+                }if (amount_clicks <= score)
                 {
                     new_level_score_intent.putExtra("new_score", score);
                 }
+
 
                 setResult(RESULT_OK, new_level_score_intent);
                 finish();
