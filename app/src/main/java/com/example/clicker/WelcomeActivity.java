@@ -41,13 +41,13 @@ public class WelcomeActivity extends AppCompatActivity {
 
         if (PREFERENCES_score_level_save.contains("APP_PREFERENCES_SCORE")) {
             textView_scoreInfo.setText("Score: " + PREFERENCES_score_level_save.getLong("APP_PREFERENCES_SCORE", score));
-            score = PREFERENCES_score_level_save.getLong("APP_PREFERENCES_SCORE",score);
+            score = PREFERENCES_score_level_save.getLong("APP_PREFERENCES_SCORE", score);
         } else {
             textView_scoreInfo.setText("Score: 0");
         }
         if (PREFERENCES_score_level_save.contains("APP_PREFERENCES_LEVEL")) {
             textView_levelInfo.setText("Level: " + PREFERENCES_score_level_save.getInt("APP_PREFERENCES_LEVEL", level));
-            level = PREFERENCES_score_level_save.getInt("APP_PREFERENCES_LEVEL",level);
+            level = PREFERENCES_score_level_save.getInt("APP_PREFERENCES_LEVEL", level);
         } else {
             textView_levelInfo.setText("Level: 1");
         }
@@ -63,7 +63,6 @@ public class WelcomeActivity extends AppCompatActivity {
 
             }
         });
-
 
 
     }
