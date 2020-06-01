@@ -4,7 +4,9 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.annotation.SuppressLint;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -28,6 +30,7 @@ public class GameFieldActivity extends AppCompatActivity {
     long score;
     boolean check_new_score = true;
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -41,10 +44,16 @@ public class GameFieldActivity extends AppCompatActivity {
 
         level = getIntent().getIntExtra("new_level_intent", 1);
         score = getIntent().getLongExtra("new_score_intent", 0);
+        Log.e("SCORE","score___ "+score);
 
 
-        textView_level.setText("Level: " + level);
         textView_amountClicks.setText("Score:\n0");
+
+        if (level > 1) {
+            textView_level.setText("Level: " + level);
+        } else {
+            textView_level.setText("Level: 1");
+        }
 
         button_click.setOnClickListener(new OnClickListener() {
             @Override
@@ -77,6 +86,7 @@ public class GameFieldActivity extends AppCompatActivity {
                 if (msg.what == 1) {
                     if (check_new_score) {
                         Toast.makeText(GameFieldActivity.this, "NEW SCORE", Toast.LENGTH_SHORT).show();
+                        Log.e("SCORE","score: "+score);
                         check_new_score = false;
                     }
                 }
@@ -86,7 +96,7 @@ public class GameFieldActivity extends AppCompatActivity {
         Thread t_score = new Thread(new Runnable() {
             @Override
             public void run() {
-                while (check_new_score){
+                while (check_new_score) {
                     if (!(amount_clicks == 0 && score == 0)) {
                         if (amount_clicks > score) {
                             handler_score.sendEmptyMessage(1);
@@ -113,11 +123,10 @@ public class GameFieldActivity extends AppCompatActivity {
 
                 }
 
-                if (amount_clicks > score)
-                {
+                if (amount_clicks > score) {
                     new_level_score_intent.putExtra("new_score", amount_clicks);
-                }if (amount_clicks <= score)
-                {
+                }
+                if (amount_clicks <= score) {
                     new_level_score_intent.putExtra("new_score", score);
                 }
 
