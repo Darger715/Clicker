@@ -166,25 +166,26 @@ public class GameFieldActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
 
-                vibrator.cancel();
-
-
-                Intent new_level_score_intent = new Intent(GameFieldActivity.this, WelcomeActivity.class);
+                Intent intent_new_data = new Intent(GameFieldActivity.this, WelcomeActivity.class);
 
                 if (level > (getIntent().getIntExtra("new_level_intent", 0))) {
 
-                    new_level_score_intent.putExtra("new_level", level);
+                    intent_new_data.putExtra("new_level", level);
 
                 }
 
                 if (amount_clicks > score) {
-                    new_level_score_intent.putExtra("new_score", amount_clicks);
+                    intent_new_data.putExtra("new_score", amount_clicks);
                 }
                 if (amount_clicks <= score) {
-                    new_level_score_intent.putExtra("new_score", score);
+                    intent_new_data.putExtra("new_score", score);
                 }
 
-                setResult(RESULT_OK, new_level_score_intent);
+                intent_new_data.putExtra("VIBRATION",check_vibration);
+                intent_new_data.putExtra("SOUND",check_sound);
+
+
+                setResult(RESULT_OK, intent_new_data);
                 finish();
             }
         });
