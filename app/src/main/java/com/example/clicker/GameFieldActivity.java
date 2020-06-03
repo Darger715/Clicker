@@ -34,6 +34,11 @@ public class GameFieldActivity extends AppCompatActivity {
     boolean check_new_score = true;
     boolean check_vibration;
     boolean check_sound;
+    boolean check_amount_clicks;
+    int hp = 3;
+    boolean check_red_button_push;
+    boolean check_game_over = true;
+    boolean check_change_color;
 
     private AudioManager audioManager;
     private Vibrator vibrator;
@@ -58,6 +63,7 @@ public class GameFieldActivity extends AppCompatActivity {
 
 
         textView_amountClicks.setText("Score:\n0");
+        textView_hp.setText("HP: " + hp);
 
         if (level > 1) {
             textView_level.setText("Level: " + level);
@@ -84,6 +90,7 @@ public class GameFieldActivity extends AppCompatActivity {
             public void onClick(View v) {
                 amount_clicks++;
                 textView_amountClicks.setText("Score:\n" + (long) amount_clicks);
+                check_amount_clicks = true;
                 //audioManager.loadSoundEffects();
 
 //vibration
@@ -161,6 +168,142 @@ public class GameFieldActivity extends AppCompatActivity {
         t_score.start();
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+        final Handler handler_change_color = new Handler() {
+            @SuppressLint("HandlerLeak")
+            @Override
+            public void handleMessage(@NonNull Message msg) {
+
+                if (msg.what == 0) {
+                    check_amount_clicks = false;
+                    check_red_button_push = true;
+                    button_click.setBackgroundColor(getResources().getColor(R.color.colorAccent));
+                }
+
+                if(msg.what == 1){
+                    check_change_color = true;
+                    check_amount_clicks = false;
+                    check_red_button_push = false;
+                    button_click.setBackgroundColor(getResources().getColor(R.color.button_color));
+                    Log.e("MSG.WHAT",""+msg.what);
+                }
+            }
+        };
+        Thread t_change_color = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                while (hp > 0) {
+                    if (amount_clicks != 0) {
+                        if(check_amount_clicks){
+                        if (amount_clicks % 2 == 0) {
+                            check_amount_clicks = false;
+                            handler_change_color.sendEmptyMessage(0);
+
+                        }}else if (check_change_color){
+                            check_change_color = false;handler_change_color.sendEmptyMessageDelayed(1, 1000);}
+                    }
+                }
+            }
+
+        });
+        t_change_color.start();
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        final Handler handler_hp = new Handler() {
+            @SuppressLint("HandlerLeak")
+            @Override
+            public void handleMessage(@NonNull Message msg) {
+
+                if (msg.what == 0) {
+                    check_red_button_push = false;
+                    hp--;
+                    Toast.makeText(GameFieldActivity.this,"-1 HP",Toast.LENGTH_SHORT).show();
+                    textView_hp.setText("HP: " +hp);
+                    Log.e("HP","-1 HP");
+                }
+                if(msg.what == 1){
+                    check_game_over = false;
+                Toast.makeText(GameFieldActivity.this,"GAME OVER",Toast.LENGTH_SHORT).show();
+                    Log.e("GAME OVER","GAME OVER");
+                finish();
+                }
+            }
+        };
+        Thread t_hp = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                while (true) {
+                    if (hp > 0) {
+                        if(check_red_button_push)
+                        {
+                            if(button_click.isPressed())
+                            {
+                                check_red_button_push = false;
+                                handler_hp.sendEmptyMessage(0);
+
+                            }
+                        }
+
+
+                    }else if (check_game_over){
+                        check_game_over = false;handler_hp.sendEmptyMessage(1);}
+                }
+            }
+        });
+        t_hp.start();
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
         //передача данных при закрытии активности
         button_save_exit.setOnClickListener(new OnClickListener() {
             @Override
@@ -181,8 +324,8 @@ public class GameFieldActivity extends AppCompatActivity {
                     intent_new_data.putExtra("new_score", score);
                 }
 
-                intent_new_data.putExtra("VIBRATION",check_vibration);
-                intent_new_data.putExtra("SOUND",check_sound);
+                intent_new_data.putExtra("VIBRATION", check_vibration);
+                intent_new_data.putExtra("SOUND", check_sound);
 
 
                 setResult(RESULT_OK, intent_new_data);

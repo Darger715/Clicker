@@ -53,8 +53,6 @@ public class WelcomeActivity extends AppCompatActivity {
 
         check_sound = SHARED_PREFERENCES_SAVING.getBoolean("APP_PREFERENCES_SOUND", check_sound);
         check_vibration = SHARED_PREFERENCES_SAVING.getBoolean("APP_PREFERENCES_VIBRATION", check_vibration);
-        Log.e("vibration_image", "vibration_mode_load: " + check_vibration);
-        Log.e("sound_image", "sound_mode_load: " + check_sound);
 
         //Button sound
         if (check_sound) {
@@ -88,7 +86,7 @@ public class WelcomeActivity extends AppCompatActivity {
                     button_update_results.setSoundEffectsEnabled(true);
                 }
                 editor.putBoolean("APP_PREFERENCES_SOUND", check_sound);
-                Log.e("sound_image", "sound_mode_save: " + check_sound);
+
             }
         });
 
@@ -111,7 +109,7 @@ public class WelcomeActivity extends AppCompatActivity {
                     button_vibration.setBackgroundResource(R.drawable.image_vibration_on);
                 }
                 editor.putBoolean("APP_PREFERENCES_VIBRATION", check_vibration);
-                Log.e("vibration_image", "vibration_mode_save: " + check_vibration);
+
             }
         });
 
@@ -157,7 +155,7 @@ public class WelcomeActivity extends AppCompatActivity {
             score = data.getLongExtra("new_score", 0);
             textView_scoreInfo.setText("Score: " + score);
 
-            check_sound = data.getBooleanExtra("SOUND",check_sound);
+            check_sound = data.getBooleanExtra("SOUND", check_sound);
             check_vibration = data.getBooleanExtra("VIBRATION", check_vibration);
 
             editor.putBoolean("APP_PREFERENCES_SOUND", check_sound);
