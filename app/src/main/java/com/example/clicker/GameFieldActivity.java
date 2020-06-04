@@ -38,7 +38,7 @@ public class GameFieldActivity extends AppCompatActivity {
     int hp = 3;
     boolean check_red_button_push;
     boolean check_game_over = true;
-    boolean check_change_color;
+    boolean check_change_color = true;
 
     private AudioManager audioManager;
     private Vibrator vibrator;
@@ -168,36 +168,31 @@ public class GameFieldActivity extends AppCompatActivity {
         t_score.start();
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
         final Handler handler_change_color = new Handler() {
             @SuppressLint("HandlerLeak")
             @Override
             public void handleMessage(@NonNull Message msg) {
 
                 if (msg.what == 0) {
-                    check_amount_clicks = false;
                     check_red_button_push = true;
+                    check_change_color = true;
                     button_click.setBackgroundColor(getResources().getColor(R.color.colorAccent));
+                   // try {
+                   //     Thread.sleep(1000);
+                   // } catch (Exception e) {
+                   // }
+
                 }
 
-                if(msg.what == 1){
-                    check_change_color = true;
+                if (msg.what == 1) {
                     check_amount_clicks = false;
                     check_red_button_push = false;
+                    //try {
+                    //    Thread.sleep(1000);
+                    //} catch (Exception e) {
+                    //}
                     button_click.setBackgroundColor(getResources().getColor(R.color.button_color));
-                    Log.e("MSG.WHAT",""+msg.what);
+                    Log.e("MSG.WHAT", "" + msg.what);
                 }
             }
         };
@@ -205,35 +200,28 @@ public class GameFieldActivity extends AppCompatActivity {
             @Override
             public void run() {
                 while (hp > 0) {
-                    if (amount_clicks != 0) {
-                        if(check_amount_clicks){
-                        if (amount_clicks % 2 == 0) {
-                            check_amount_clicks = false;
-                            handler_change_color.sendEmptyMessage(0);
+                    if (amount_clicks != 0)
+                    {
+                        if (check_amount_clicks)
+                        {
+                            if (amount_clicks % 10 == 0)
+                            {
+                                check_amount_clicks = false;
+                                handler_change_color.sendEmptyMessage(0);
+                            }
 
-                        }}else if (check_change_color){
-                            check_change_color = false;handler_change_color.sendEmptyMessageDelayed(1, 1000);}
+                        }
+                        else if (check_change_color)
+                        {
+                            check_change_color = false;
+                            handler_change_color.sendEmptyMessageDelayed(1,1000);
+                        }
                     }
                 }
             }
 
         });
         t_change_color.start();
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
         final Handler handler_hp = new Handler() {
@@ -244,15 +232,15 @@ public class GameFieldActivity extends AppCompatActivity {
                 if (msg.what == 0) {
                     check_red_button_push = false;
                     hp--;
-                    Toast.makeText(GameFieldActivity.this,"-1 HP",Toast.LENGTH_SHORT).show();
-                    textView_hp.setText("HP: " +hp);
-                    Log.e("HP","-1 HP");
+                    Toast.makeText(GameFieldActivity.this, "-1 HP", Toast.LENGTH_SHORT).show();
+                    textView_hp.setText("HP: " + hp);
+                    Log.e("HP", "-1 HP");
                 }
-                if(msg.what == 1){
+                if (msg.what == 1) {
                     check_game_over = false;
-                Toast.makeText(GameFieldActivity.this,"GAME OVER",Toast.LENGTH_SHORT).show();
-                    Log.e("GAME OVER","GAME OVER");
-                finish();
+                    Toast.makeText(GameFieldActivity.this, "GAME OVER", Toast.LENGTH_SHORT).show();
+                    Log.e("GAME OVER", "GAME OVER");
+                    finish();
                 }
             }
         };
@@ -261,10 +249,8 @@ public class GameFieldActivity extends AppCompatActivity {
             public void run() {
                 while (true) {
                     if (hp > 0) {
-                        if(check_red_button_push)
-                        {
-                            if(button_click.isPressed())
-                            {
+                        if (check_red_button_push) {
+                            if (button_click.isPressed()) {
                                 check_red_button_push = false;
                                 handler_hp.sendEmptyMessage(0);
 
@@ -272,36 +258,14 @@ public class GameFieldActivity extends AppCompatActivity {
                         }
 
 
-                    }else if (check_game_over){
-                        check_game_over = false;handler_hp.sendEmptyMessage(1);}
+                    } else if (check_game_over) {
+                        check_game_over = false;
+                        handler_hp.sendEmptyMessage(1);
+                    }
                 }
             }
         });
         t_hp.start();
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
         //передача данных при закрытии активности
