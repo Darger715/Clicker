@@ -1,6 +1,11 @@
 <resources>
     <string name="app_name">Clicker</string>
     <string name="welcome">Welcome!</string>
-    <string name="key_vibration">APP_PREFERENCES_VIBRATION</string>
-    <string name="key_sound">APP_PREFERENCES_SOUND</string>
+    <string name="back_dialog_title_gameOver">"GAME OVER"</string>
+    <string name="back_dialog_try_again">"TRY AGAIN"</string>
+    <string name="back_dialog_exit">"EXIT"</string>
+    <string name="back_dialog_stay">"TRY AGAIN"</string>
+    <string name="back_dialog_exit_activity">"EXIT"</string>
+    <string name="back_dialog_title_exit">"Exit?"</string>
+
 </resources>

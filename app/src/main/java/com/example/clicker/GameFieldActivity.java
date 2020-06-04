@@ -6,12 +6,10 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.media.AudioManager;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
-import android.os.VibrationEffect;
 import android.os.Vibrator;
 import android.util.Log;
 import android.view.View;
@@ -39,6 +37,8 @@ public class GameFieldActivity extends AppCompatActivity {
     boolean check_red_button_push;
     boolean check_game_over = true;
     boolean check_change_color = true;
+    boolean isDialogShow;
+    boolean isDialogShow_backPressed;
 
     private AudioManager audioManager;
     private Vibrator vibrator;
@@ -177,20 +177,11 @@ public class GameFieldActivity extends AppCompatActivity {
                     check_red_button_push = true;
                     check_change_color = true;
                     button_click.setBackgroundColor(getResources().getColor(R.color.colorAccent));
-                   // try {
-                   //     Thread.sleep(1000);
-                   // } catch (Exception e) {
-                   // }
-
                 }
 
                 if (msg.what == 1) {
                     check_amount_clicks = false;
                     check_red_button_push = false;
-                    //try {
-                    //    Thread.sleep(1000);
-                    //} catch (Exception e) {
-                    //}
                     button_click.setBackgroundColor(getResources().getColor(R.color.button_color));
                     Log.e("MSG.WHAT", "" + msg.what);
                 }
@@ -200,21 +191,16 @@ public class GameFieldActivity extends AppCompatActivity {
             @Override
             public void run() {
                 while (hp > 0) {
-                    if (amount_clicks != 0)
-                    {
-                        if (check_amount_clicks)
-                        {
-                            if (amount_clicks % 10 == 0)
-                            {
+                    if (amount_clicks != 0) {
+                        if (check_amount_clicks) {
+                            if (amount_clicks % 10 == 0) {
                                 check_amount_clicks = false;
                                 handler_change_color.sendEmptyMessage(0);
                             }
 
-                        }
-                        else if (check_change_color)
-                        {
+                        } else if (check_change_color) {
                             check_change_color = false;
-                            handler_change_color.sendEmptyMessageDelayed(1,1000);
+                            handler_change_color.sendEmptyMessageDelayed(1, 1000);
                         }
                     }
                 }
@@ -238,9 +224,7 @@ public class GameFieldActivity extends AppCompatActivity {
                 }
                 if (msg.what == 1) {
                     check_game_over = false;
-                    Toast.makeText(GameFieldActivity.this, "GAME OVER", Toast.LENGTH_SHORT).show();
-                    Log.e("GAME OVER", "GAME OVER");
-                    finish();
+                    GameOverDialog();
                 }
             }
         };
@@ -298,5 +282,52 @@ public class GameFieldActivity extends AppCompatActivity {
         });
 
 
+    }
+
+    //GameOver DialogFragment
+    public void GameOverDialog() {
+
+        if (!isDialogShow) {
+            GameOver_DialogFragment gameOver_DialogFragment = new GameOver_DialogFragment();
+            gameOver_DialogFragment.show(getSupportFragmentManager(), "gameOver_Dialog");
+            isDialogShow = true;
+
+        }
+
+    }
+
+
+    void gameOver_DialogYes(String a) {
+        GameOverDialog();
+        finish();
+    }
+
+    void gameOver_DialogNo() {
+        button_click.setClickable(false);
+        isDialogShow = false;
+
+
+        //todo ReView All
+    }
+
+    //Back DialogFragment
+    public void onBackPressed() {
+
+        if (!isDialogShow_backPressed) {
+            GameOver_DialogFragment backDialogFragment = new GameOver_DialogFragment();
+            backDialogFragment.show(getSupportFragmentManager(), "backDialog");
+            isDialogShow_backPressed = true;
+
+        } else
+            super.onBackPressed();
+    }
+
+
+    void backDialogYes(String a) {
+        GameOverDialog();
+    }
+
+    void backDialogNo() {
+        isDialogShow_backPressed = false;
     }
 }
