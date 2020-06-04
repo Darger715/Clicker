@@ -1,6 +1,7 @@
 package com.example.clicker;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.annotation.SuppressLint;
@@ -190,10 +191,11 @@ public class GameFieldActivity extends AppCompatActivity {
         Thread t_change_color = new Thread(new Runnable() {
             @Override
             public void run() {
-                while (hp > 0) {
+                while(true){
+                if (hp > 0) {
                     if (amount_clicks != 0) {
                         if (check_amount_clicks) {
-                            if (amount_clicks % 10 == 0) {
+                            if (amount_clicks % 3 == 0) {
                                 check_amount_clicks = false;
                                 handler_change_color.sendEmptyMessage(0);
                             }
@@ -203,7 +205,7 @@ public class GameFieldActivity extends AppCompatActivity {
                             handler_change_color.sendEmptyMessageDelayed(1, 1000);
                         }
                     }
-                }
+                }}
             }
 
         });
@@ -220,10 +222,9 @@ public class GameFieldActivity extends AppCompatActivity {
                     hp--;
                     Toast.makeText(GameFieldActivity.this, "-1 HP", Toast.LENGTH_SHORT).show();
                     textView_hp.setText("HP: " + hp);
-                    Log.e("HP", "-1 HP");
                 }
                 if (msg.what == 1) {
-                    check_game_over = false;
+                    button_click.setClickable(false);
                     GameOverDialog();
                 }
             }
@@ -286,37 +287,48 @@ public class GameFieldActivity extends AppCompatActivity {
 
     //GameOver DialogFragment
     public void GameOverDialog() {
+        if (hp < 1) {
+            if (!isDialogShow) {
+                GameOver_DialogFragment gameOver_DialogFragment = new GameOver_DialogFragment();
+                gameOver_DialogFragment.show(getSupportFragmentManager(), "gameOver_Dialog");
+                isDialogShow = true;
+                Log.e("GameOver_Dialog", "" + isDialogShow);
+            }
 
-        if (!isDialogShow) {
-            GameOver_DialogFragment gameOver_DialogFragment = new GameOver_DialogFragment();
-            gameOver_DialogFragment.show(getSupportFragmentManager(), "gameOver_Dialog");
-            isDialogShow = true;
 
-        }
-
+        } else
+            super.onBackPressed();
     }
 
 
     void gameOver_DialogYes(String a) {
         GameOverDialog();
-        finish();
+finish();
     }
 
     void gameOver_DialogNo() {
-        button_click.setClickable(false);
+        //button_click.setClickable(false);
         isDialogShow = false;
 
+        amount_clicks = 0;
+        hp = 3;
+        textView_amountClicks.setText("Score:\n" + amount_clicks);
+        textView_hp.setText("HP: " + hp);
+        button_click.setClickable(true);
 
-        //todo ReView All
+
+
+
     }
 
     //Back DialogFragment
     public void onBackPressed() {
 
         if (!isDialogShow_backPressed) {
-            GameOver_DialogFragment backDialogFragment = new GameOver_DialogFragment();
+            Back_DialogFragment backDialogFragment = new Back_DialogFragment();
             backDialogFragment.show(getSupportFragmentManager(), "backDialog");
             isDialogShow_backPressed = true;
+            Log.e("onBackPressed_Dialog", "" + isDialogShow_backPressed);
 
         } else
             super.onBackPressed();
@@ -324,7 +336,7 @@ public class GameFieldActivity extends AppCompatActivity {
 
 
     void backDialogYes(String a) {
-        GameOverDialog();
+        onBackPressed();
     }
 
     void backDialogNo() {
