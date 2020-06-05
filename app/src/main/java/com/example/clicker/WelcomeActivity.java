@@ -3,9 +3,11 @@ package com.example.clicker;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.LinearLayoutCompat;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.res.Configuration;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -18,6 +20,8 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.util.Locale;
+
 public class WelcomeActivity extends AppCompatActivity {
 
     TextView textView_levelInfo;
@@ -29,15 +33,24 @@ public class WelcomeActivity extends AppCompatActivity {
     boolean check_vibration;
     Button button_sound;
     Button button_vibration;
+    Button button_language;
+    boolean check_language = true; //true = ru --- false = eu
 
     SharedPreferences SHARED_PREFERENCES_SAVING;
 
     final int REQUEST_CODE_SCORE = 1;
     SharedPreferences.Editor editor;
 
+    public static final String localeCode = "lang";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        SharedPreferences preferences = getPreferences(Activity.MODE_PRIVATE);
+        String lang =
+                preferences.getString(localeCode, getResources().getConfiguration().locale.getLanguage());
+
+        updateLangForContext(this, lang);
         setContentView(R.layout.welcome_activiy_screen);
 
         textView_levelInfo = findViewById(R.id.welcomeActivity_textView_levelInfo);
@@ -45,6 +58,7 @@ public class WelcomeActivity extends AppCompatActivity {
         button_update_results = findViewById(R.id.welcomeActivity_button_update_results);
         button_sound = findViewById(R.id.welcomeActivity_button_sound_on_off);
         button_vibration = findViewById(R.id.welcomeActivity_button_vibration_on_off);
+        button_language = findViewById(R.id.welcomeActivity_button_language);
 
 
         SHARED_PREFERENCES_SAVING = getSharedPreferences("APP_PREFERENCES", Context.MODE_PRIVATE);
@@ -53,6 +67,31 @@ public class WelcomeActivity extends AppCompatActivity {
 
         check_sound = SHARED_PREFERENCES_SAVING.getBoolean("APP_PREFERENCES_SOUND", check_sound);
         check_vibration = SHARED_PREFERENCES_SAVING.getBoolean("APP_PREFERENCES_VIBRATION", check_vibration);
+
+        //Button language
+        button_language.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                SharedPreferences preferences = getPreferences(Activity.MODE_PRIVATE);
+                SharedPreferences.Editor editor_ = preferences.edit();
+                if (check_language) {
+                    editor_.putString(localeCode, "en");
+
+                } else {
+                    editor_.putString(localeCode, "ru");
+                    Toast.makeText(WelcomeActivity.this, "App reboot", Toast.LENGTH_SHORT);
+                }
+                try {
+                    Thread.sleep(1000);
+                } catch (Exception e) {
+                }
+                editor_.commit();
+
+
+                System.exit(0);// перезагружает все приложение
+            }
+        });
+
 
         //Button sound
         if (check_sound) {
@@ -166,5 +205,14 @@ public class WelcomeActivity extends AppCompatActivity {
 
 
         }
+    }
+
+    public static void updateLangForContext(Context context, String lang) {
+        //здесь из базы данных достаем предыдущее значение локали и ставим его
+        Locale locale = new Locale(lang);
+        Locale.setDefault(locale);
+        Configuration config = new Configuration();
+        config.locale = locale;
+        context.getResources().updateConfiguration(config, null);
     }
 }

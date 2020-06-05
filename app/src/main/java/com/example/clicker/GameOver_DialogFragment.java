@@ -17,18 +17,18 @@ public class GameOver_DialogFragment extends DialogFragment {
 
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
         builder.setTitle(R.string.back_dialog_title_gameOver);
-
         builder.setPositiveButton(R.string.back_dialog_exit, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                ((GameFieldActivity) getActivity()).gameOver_DialogYes("123123");
 
+                ((GameFieldActivity) getActivity()).gameOver_DialogYes("123123");
             }
         });
 
         builder.setNeutralButton(R.string.back_dialog_try_again, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
+
                 ((GameFieldActivity) getActivity()).gameOver_DialogNo();
             }
         });

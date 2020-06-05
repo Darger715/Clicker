@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="back_dialog_title_gameOver">"ИГРА ОКОНЧЕНА"</string>
+    <string name="back_dialog_try_again">"ЗАНОВО"</string>
+    <string name="back_dialog_exit">"ВЫХОД"</string>
+    <string name="back_dialog_stay">"ОСТАТЬСЯ"</string>
+    <string name="back_dialog_exit_activity">"ВЫХОД"</string>
+    <string name="back_dialog_title_exit">"Вы дейсвительно хотите выйти?"</string>
+</resources>
