@@ -92,7 +92,7 @@ public class WelcomeActivity extends AppCompatActivity {
                 } else {
                     check_language = true;
                     editor_.putString(localeCode, "ru");
-                    Toast.makeText(WelcomeActivity.this, "App reboot", Toast.LENGTH_SHORT);
+
                 }
                 try {
                     Thread.sleep(1000);
@@ -101,7 +101,6 @@ public class WelcomeActivity extends AppCompatActivity {
                 editor.putBoolean("APP_PREFERENCES_LANGUAGE", check_language);
                 editor.commit();
                 editor_.commit();
-
 
                 System.exit(0);// перезагружает все приложение
             }
