@@ -13,8 +13,7 @@
         android:layout_height="wrap_content"
         android:layout_alignParentRight="true"
         android:layout_marginTop="80dp"
-        android:layout_marginRight="20dp"
-        android:textSize="14pt" />
+        android:layout_marginRight="20dp"/>
 
     <TextView
         android:id="@+id/game_field_activity_textview_level"
@@ -22,16 +21,14 @@
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
         android:layout_marginLeft="20dp"
-        android:layout_marginTop="80dp"
-        android:textSize="14pt" />
+        android:layout_marginTop="80dp"/>
 
     <TextView
         android:id="@+id/game_field_activity_textview_hp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="80dp"
-        android:textSize="14pt" />
+        android:layout_marginTop="80dp"/>
 
     <Button
         android:id="@+id/game_field_activity_button_game_field"
@@ -46,8 +43,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="250dp"
-        android:text="Save and Exit" />
+        android:layout_marginTop="250dp"/>
 
 
 </RelativeLayout>

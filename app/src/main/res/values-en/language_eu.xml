@@ -1,9 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <string name="welcome">Welcome!</string>
+    <string name="start">START</string>
     <string name="back_dialog_title_gameOver">"GAME OVER"</string>
     <string name="back_dialog_try_again">"TRY AGAIN"</string>
     <string name="back_dialog_exit">"EXIT"</string>
     <string name="back_dialog_stay">"STAY"</string>
     <string name="back_dialog_exit_activity">"EXIT"</string>
-    <string name="back_dialog_title_exit">"Exit?"</string>
+    <string name="back_dialog_title_exit">"Are you want exit\nwithout saving?"</string>
+    <string name="welcomActivity_level">"Level: "</string>
+    <string name="welcomActivity_score">"Score: "</string>
+    <string name="gameFieldActivity_hp">"HP: "</string>
+    <string name="gameFieldActivity_score">"Score:"</string>
+    <string name="gameFieldActivity_saveExit">"SAVE AND EXIT"</string>
+    <string name="gameFieldActivity_language_button">"EN"</string>
 </resources>

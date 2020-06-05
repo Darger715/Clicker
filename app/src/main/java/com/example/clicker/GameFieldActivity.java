@@ -13,6 +13,7 @@ import android.os.Handler;
 import android.os.Message;
 import android.os.Vibrator;
 import android.util.Log;
+import android.util.TypedValue;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
@@ -40,6 +41,7 @@ public class GameFieldActivity extends AppCompatActivity {
     boolean check_change_color = true;
     boolean isDialogShow;
     boolean isDialogShow_backPressed;
+    boolean check_language;
 
     private AudioManager audioManager;
     private Vibrator vibrator;
@@ -56,20 +58,27 @@ public class GameFieldActivity extends AppCompatActivity {
         button_click = findViewById(R.id.game_field_activity_button_game_field);
         button_save_exit = findViewById(R.id.game_field_activity_button_save_and_exit);
 
+        button_save_exit.setText(getResources().getString(R.string.gameFieldActivity_saveExit));
+
         //Данные с первой Activity
         level = getIntent().getIntExtra("new_level_intent", 1);
         score = getIntent().getLongExtra("new_score_intent", 0);
         check_vibration = getIntent().getBooleanExtra("check_vibration", true);
         check_sound = getIntent().getBooleanExtra("check_sound", true);
+        check_language = getIntent().getBooleanExtra("check_language", false);
 
 
-        textView_amountClicks.setText("Score:\n0");
-        textView_hp.setText("HP: " + hp);
+        textView_amountClicks.setText(getResources().getString(R.string.welcomActivity_score) + "\n0");
+        textView_amountClicks.setTextSize(TypedValue.COMPLEX_UNIT_PT, 12);
+        textView_hp.setText(getResources().getString(R.string.gameFieldActivity_hp) + "\n" + hp);
+        textView_hp.setTextSize(TypedValue.COMPLEX_UNIT_PT, 12);
 
         if (level > 1) {
-            textView_level.setText("Level: " + level);
+            textView_level.setText(getResources().getString(R.string.welcomActivity_level) + "\n" + level);
+            textView_level.setTextSize(TypedValue.COMPLEX_UNIT_PT, 12);
         } else {
-            textView_level.setText("Level: 1");
+            textView_level.setText(getResources().getString(R.string.welcomActivity_level) + "\n" + "1");
+            textView_level.setTextSize(TypedValue.COMPLEX_UNIT_PT, 12);
 
         }
 
@@ -87,10 +96,12 @@ public class GameFieldActivity extends AppCompatActivity {
         }
 
         button_click.setOnClickListener(new OnClickListener() {
+            @SuppressLint("SetTextI18n")
             @Override
             public void onClick(View v) {
                 amount_clicks++;
-                textView_amountClicks.setText("Score:\n" + (long) amount_clicks);
+                textView_amountClicks.setText(getResources().getString(R.string.welcomActivity_score) + "\n" + (long) amount_clicks);
+                textView_amountClicks.setTextSize(TypedValue.COMPLEX_UNIT_PT, 12);
                 check_amount_clicks = true;
                 //audioManager.loadSoundEffects();
 
@@ -126,8 +137,13 @@ public class GameFieldActivity extends AppCompatActivity {
                 //level
                 if (amount_clicks % 50 == 0) {
                     level++;
-                    Toast.makeText(GameFieldActivity.this, "LEVEL UP", Toast.LENGTH_SHORT).show();
-                    textView_level.setText("Level: " + level);
+                    if (!check_language) {
+                        Toast.makeText(GameFieldActivity.this, "LEVEL UP", Toast.LENGTH_SHORT).show();
+                    } else {
+                        Toast.makeText(GameFieldActivity.this, "УРОВЕНЬ ПОВЫШЕН", Toast.LENGTH_SHORT).show();
+                    }
+                    textView_level.setText(getResources().getString(R.string.welcomActivity_level) + "\n" + level);
+                    textView_level.setTextSize(TypedValue.COMPLEX_UNIT_PT, 12);
                 }
                 {
 
@@ -146,7 +162,11 @@ public class GameFieldActivity extends AppCompatActivity {
 
                 if (msg.what == 1) {
                     if (check_new_score) {
-                        Toast.makeText(GameFieldActivity.this, "NEW SCORE", Toast.LENGTH_SHORT).show();
+                        if (!check_language) {
+                            Toast.makeText(GameFieldActivity.this, "NEW SCORE", Toast.LENGTH_SHORT).show();
+                        } else {
+                            Toast.makeText(GameFieldActivity.this, "НОВЫЙ РЕКОРД", Toast.LENGTH_SHORT).show();
+                        }
                         check_new_score = false;
                     }
                 }
@@ -184,28 +204,28 @@ public class GameFieldActivity extends AppCompatActivity {
                     check_amount_clicks = false;
                     check_red_button_push = false;
                     button_click.setBackgroundColor(getResources().getColor(R.color.button_color));
-                    Log.e("MSG.WHAT", "" + msg.what);
                 }
             }
         };
         Thread t_change_color = new Thread(new Runnable() {
             @Override
             public void run() {
-                while(true){
-                if (hp > 0) {
-                    if (amount_clicks != 0) {
-                        if (check_amount_clicks) {
-                            if (amount_clicks % 3 == 0) {
-                                check_amount_clicks = false;
-                                handler_change_color.sendEmptyMessage(0);
-                            }
+                while (true) {
+                    if (hp > 0) {
+                        if (amount_clicks != 0) {
+                            if (check_amount_clicks) {
+                                if (amount_clicks % 10 == 0) {
+                                    check_amount_clicks = false;
+                                    handler_change_color.sendEmptyMessage(0);
+                                }
 
-                        } else if (check_change_color) {
-                            check_change_color = false;
-                            handler_change_color.sendEmptyMessageDelayed(1, 1000);
+                            } else if (check_change_color) {
+                                check_change_color = false;
+                                handler_change_color.sendEmptyMessageDelayed(1, 1000);
+                            }
                         }
                     }
-                }}
+                }
             }
 
         });
@@ -220,8 +240,9 @@ public class GameFieldActivity extends AppCompatActivity {
                 if (msg.what == 0) {
                     check_red_button_push = false;
                     hp--;
-                    Toast.makeText(GameFieldActivity.this, "-1 HP", Toast.LENGTH_SHORT).show();
-                    textView_hp.setText("HP: " + hp);
+                    Toast.makeText(GameFieldActivity.this, "-1", Toast.LENGTH_SHORT).show();
+                    textView_hp.setText(getResources().getString(R.string.gameFieldActivity_hp) + "\n" + hp);
+                    textView_hp.setTextSize(TypedValue.COMPLEX_UNIT_PT, 12);
                 }
                 if (msg.what == 1) {
                     button_click.setClickable(false);
@@ -292,7 +313,6 @@ public class GameFieldActivity extends AppCompatActivity {
                 GameOver_DialogFragment gameOver_DialogFragment = new GameOver_DialogFragment();
                 gameOver_DialogFragment.show(getSupportFragmentManager(), "gameOver_Dialog");
                 isDialogShow = true;
-                Log.e("GameOver_Dialog", "" + isDialogShow);
             }
 
 
@@ -303,7 +323,7 @@ public class GameFieldActivity extends AppCompatActivity {
 
     void gameOver_DialogYes(String a) {
         GameOverDialog();
-finish();
+        finish();
     }
 
     void gameOver_DialogNo() {
@@ -312,11 +332,11 @@ finish();
 
         amount_clicks = 0;
         hp = 3;
-        textView_amountClicks.setText("Score:\n" + amount_clicks);
-        textView_hp.setText("HP: " + hp);
+        textView_amountClicks.setText(getResources().getString(R.string.gameFieldActivity_score) + "\n" + amount_clicks);
+        textView_amountClicks.setTextSize(TypedValue.COMPLEX_UNIT_PT, 12);
+        textView_hp.setText(getResources().getString(R.string.gameFieldActivity_hp) + "\n" + hp);
+        textView_hp.setTextSize(TypedValue.COMPLEX_UNIT_PT, 12);
         button_click.setClickable(true);
-
-
 
 
     }

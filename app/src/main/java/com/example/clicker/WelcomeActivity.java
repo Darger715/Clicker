@@ -10,6 +10,7 @@ import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.util.Log;
+import android.util.TypedValue;
 import android.view.View;
 import android.widget.ActionMenuView;
 import android.widget.AdapterView;
@@ -24,6 +25,7 @@ import java.util.Locale;
 
 public class WelcomeActivity extends AppCompatActivity {
 
+    TextView textView_welcome;
     TextView textView_levelInfo;
     TextView textView_scoreInfo;
     Button button_update_results;
@@ -31,10 +33,11 @@ public class WelcomeActivity extends AppCompatActivity {
     long score;
     boolean check_sound;
     boolean check_vibration;
+    boolean check_language; //true = ru --- false = eu
     Button button_sound;
     Button button_vibration;
     Button button_language;
-    boolean check_language = true; //true = ru --- false = eu
+
 
     SharedPreferences SHARED_PREFERENCES_SAVING;
 
@@ -53,6 +56,7 @@ public class WelcomeActivity extends AppCompatActivity {
         updateLangForContext(this, lang);
         setContentView(R.layout.welcome_activiy_screen);
 
+        textView_welcome = findViewById(R.id.welcomeActivity_textView_welcome);
         textView_levelInfo = findViewById(R.id.welcomeActivity_textView_levelInfo);
         textView_scoreInfo = findViewById(R.id.welcomeActivity_textView_scoreInfo);
         button_update_results = findViewById(R.id.welcomeActivity_button_update_results);
@@ -60,6 +64,8 @@ public class WelcomeActivity extends AppCompatActivity {
         button_vibration = findViewById(R.id.welcomeActivity_button_vibration_on_off);
         button_language = findViewById(R.id.welcomeActivity_button_language);
 
+        textView_welcome.setText(getResources().getString(R.string.welcome));
+        textView_welcome.setTextSize(TypedValue.COMPLEX_UNIT_PT, 10);
 
         SHARED_PREFERENCES_SAVING = getSharedPreferences("APP_PREFERENCES", Context.MODE_PRIVATE);
         editor = SHARED_PREFERENCES_SAVING.edit();
@@ -67,17 +73,24 @@ public class WelcomeActivity extends AppCompatActivity {
 
         check_sound = SHARED_PREFERENCES_SAVING.getBoolean("APP_PREFERENCES_SOUND", check_sound);
         check_vibration = SHARED_PREFERENCES_SAVING.getBoolean("APP_PREFERENCES_VIBRATION", check_vibration);
+        check_language = SHARED_PREFERENCES_SAVING.getBoolean("APP_PREFERENCES_LANGUAGE", check_language);
+
+        button_update_results.setText(getResources().getString(R.string.start));
+        button_update_results.setTextSize(TypedValue.COMPLEX_UNIT_PT, 12);
 
         //Button language
+        button_language.setText(getResources().getString(R.string.gameFieldActivity_language_button));
         button_language.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 SharedPreferences preferences = getPreferences(Activity.MODE_PRIVATE);
                 SharedPreferences.Editor editor_ = preferences.edit();
                 if (check_language) {
+                    check_language = false;
                     editor_.putString(localeCode, "en");
 
                 } else {
+                    check_language = true;
                     editor_.putString(localeCode, "ru");
                     Toast.makeText(WelcomeActivity.this, "App reboot", Toast.LENGTH_SHORT);
                 }
@@ -85,6 +98,8 @@ public class WelcomeActivity extends AppCompatActivity {
                     Thread.sleep(1000);
                 } catch (Exception e) {
                 }
+                editor.putBoolean("APP_PREFERENCES_LANGUAGE", check_language);
+                editor.commit();
                 editor_.commit();
 
 
@@ -154,16 +169,20 @@ public class WelcomeActivity extends AppCompatActivity {
 
 
         if (SHARED_PREFERENCES_SAVING.contains("APP_PREFERENCES_SCORE")) {
-            textView_scoreInfo.setText("Score: " + SHARED_PREFERENCES_SAVING.getLong("APP_PREFERENCES_SCORE", score));
+            textView_scoreInfo.setText(getResources().getString(R.string.welcomActivity_score) + SHARED_PREFERENCES_SAVING.getLong("APP_PREFERENCES_SCORE", score));
+            textView_scoreInfo.setTextSize(TypedValue.COMPLEX_UNIT_PT, 10);
             score = SHARED_PREFERENCES_SAVING.getLong("APP_PREFERENCES_SCORE", score);
         } else {
-            textView_scoreInfo.setText("Score: 0");
+            textView_scoreInfo.setText(getResources().getString(R.string.welcomActivity_score) + "0");
+            textView_scoreInfo.setTextSize(TypedValue.COMPLEX_UNIT_PT, 10);
         }
         if (SHARED_PREFERENCES_SAVING.contains("APP_PREFERENCES_LEVEL")) {
-            textView_levelInfo.setText("Level: " + SHARED_PREFERENCES_SAVING.getInt("APP_PREFERENCES_LEVEL", level));
+            textView_levelInfo.setText(getResources().getString(R.string.welcomActivity_level) + SHARED_PREFERENCES_SAVING.getInt("APP_PREFERENCES_LEVEL", level));
+            textView_levelInfo.setTextSize(TypedValue.COMPLEX_UNIT_PT, 10);
             level = SHARED_PREFERENCES_SAVING.getInt("APP_PREFERENCES_LEVEL", level);
         } else {
-            textView_levelInfo.setText("Level: 1");
+            textView_levelInfo.setText(getResources().getString(R.string.welcomActivity_level) + "1");
+            textView_levelInfo.setTextSize(TypedValue.COMPLEX_UNIT_PT, 10);
         }
 
 
@@ -175,6 +194,7 @@ public class WelcomeActivity extends AppCompatActivity {
                 intent_Alldata.putExtra("new_score_intent", score);
                 intent_Alldata.putExtra("check_vibration", check_vibration);
                 intent_Alldata.putExtra("check_sound", check_sound);
+                intent_Alldata.putExtra("check_language", check_language);
                 startActivityForResult(intent_Alldata, REQUEST_CODE_SCORE);
 
             }
@@ -188,11 +208,13 @@ public class WelcomeActivity extends AppCompatActivity {
 
 
             level = data.getIntExtra("new_level", level);
-            textView_levelInfo.setText("Level: " + level);
+            textView_levelInfo.setText(getResources().getString(R.string.welcomActivity_level) + level);
+            textView_levelInfo.setTextSize(TypedValue.COMPLEX_UNIT_PT, 10);
 
 
             score = data.getLongExtra("new_score", 0);
-            textView_scoreInfo.setText("Score: " + score);
+            textView_scoreInfo.setText(getResources().getString(R.string.welcomActivity_score) + score);
+            textView_scoreInfo.setTextSize(TypedValue.COMPLEX_UNIT_PT, 10);
 
             check_sound = data.getBooleanExtra("SOUND", check_sound);
             check_vibration = data.getBooleanExtra("VIBRATION", check_vibration);
