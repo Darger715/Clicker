@@ -13,21 +13,21 @@
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="100dp"
-        android:gravity="center"/>
+        android:gravity="center" />
 
     <TextView
         android:id="@+id/welcomeActivity_textView_levelInfo"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="230dp"/>
+        android:layout_marginTop="230dp" />
 
     <TextView
         android:id="@+id/welcomeActivity_textView_scoreInfo"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="280dp"/>
+        android:layout_marginTop="280dp" />
 
     <Button
         android:id="@+id/welcomeActivity_button_update_results"
@@ -35,31 +35,31 @@
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="500dp"
-        android:text="start"/>
+        android:text="start" />
 
     <Button
         android:id="@+id/welcomeActivity_button_sound_on_off"
         android:layout_width="124px"
         android:layout_height="124px"
-        android:background="@drawable/image_sound_on"
         android:layout_marginLeft="10dp"
-        android:layout_marginTop="10dp"/>
+        android:layout_marginTop="10dp"
+        android:background="@drawable/image_sound_on" />
 
     <Button
         android:id="@+id/welcomeActivity_button_vibration_on_off"
         android:layout_width="124px"
         android:layout_height="124px"
-        android:background="@drawable/image_vibration_on"
         android:layout_marginLeft="80dp"
-        android:layout_marginTop="10dp"/>
+        android:layout_marginTop="10dp"
+        android:background="@drawable/image_vibration_on" />
 
     <Button
         android:id="@+id/welcomeActivity_button_language"
         android:layout_width="124px"
         android:layout_height="124px"
         android:layout_alignParentRight="true"
-        android:layout_marginRight="10dp"
-        android:layout_marginTop="10dp"/>
+        android:layout_marginTop="10dp"
+        android:layout_marginRight="10dp" />
 
 
 </RelativeLayout>
