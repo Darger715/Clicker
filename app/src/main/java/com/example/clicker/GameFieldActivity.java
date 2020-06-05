@@ -3,8 +3,11 @@ package com.example.clicker;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.FragmentTransaction;
 
 import android.annotation.SuppressLint;
+import android.app.AlarmManager;
+import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.media.AudioManager;
@@ -57,7 +60,6 @@ public class GameFieldActivity extends AppCompatActivity {
         textView_hp = findViewById(R.id.game_field_activity_textview_hp);
         button_click = findViewById(R.id.game_field_activity_button_game_field);
         button_save_exit = findViewById(R.id.game_field_activity_button_save_and_exit);
-
         button_save_exit.setText(getResources().getString(R.string.gameFieldActivity_saveExit));
 
         //Данные с первой Activity
@@ -214,7 +216,7 @@ public class GameFieldActivity extends AppCompatActivity {
                     if (hp > 0) {
                         if (amount_clicks != 0) {
                             if (check_amount_clicks) {
-                                if (amount_clicks % 10 == 0) {
+                                if (amount_clicks % 2 == 0) {
                                     check_amount_clicks = false;
                                     handler_change_color.sendEmptyMessage(0);
                                 }
@@ -320,29 +322,23 @@ public class GameFieldActivity extends AppCompatActivity {
             super.onBackPressed();
     }
 
-
+/*
     void gameOver_DialogYes(String a) {
         GameOverDialog();
         finish();
     }
+*/
 
     void gameOver_DialogNo() {
-        //button_click.setClickable(false);
         isDialogShow = false;
-
-        amount_clicks = 0;
-        hp = 3;
-        textView_amountClicks.setText(getResources().getString(R.string.gameFieldActivity_score) + "\n" + amount_clicks);
-        textView_amountClicks.setTextSize(TypedValue.COMPLEX_UNIT_PT, 12);
-        textView_hp.setText(getResources().getString(R.string.gameFieldActivity_hp) + "\n" + hp);
-        textView_hp.setTextSize(TypedValue.COMPLEX_UNIT_PT, 12);
-        button_click.setClickable(true);
-
-
+        GameOverDialog();
+        finish();
     }
 
     //Back DialogFragment
     public void onBackPressed() {
+
+
 
         if (!isDialogShow_backPressed) {
             Back_DialogFragment backDialogFragment = new Back_DialogFragment();
@@ -361,5 +357,6 @@ public class GameFieldActivity extends AppCompatActivity {
 
     void backDialogNo() {
         isDialogShow_backPressed = false;
+
     }
 }
